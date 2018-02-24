@@ -1,3 +1,6 @@
 .idea
 apikeys.py
 *.pyc
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*

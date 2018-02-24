@@ -12,6 +12,9 @@ emotion_recognition_url = "https://westcentralus.api.cognitive.microsoft.com/fac
 def getEmoji(analysis):
     return ['😂', '😅']
 
+@app.route("/")
+def rootpath():
+    return 'hello world';
 
 @app.route("/emoji", methods=['POST'])
 def emoji():
@@ -37,4 +40,3 @@ def emoji():
 
 if __name__ == "__main__":
     app.run()
-    
