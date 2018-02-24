@@ -37,7 +37,8 @@ def emoji():
     analysis = response.json()
     emojiList = getEmoji(analysis)
     return jsonify({
-        'emoji': emojiList
+        'emoji': emojiList,
+		'analysis': analysis
     })
 
 if __name__ == "__main__":
