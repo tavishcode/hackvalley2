@@ -6247,6 +6247,7 @@
       "hotdog"
     ]
   , "tags": [
+      "sandwich"
     ]
   , "unicode_version": "8.0"
   , "ios_version": "9.1"
@@ -6259,7 +6260,8 @@
       "hamburger"
     ]
   , "tags": [
-      "burger"
+      "burger",
+      "sandwich"
     ]
   , "unicode_version": "6.0"
   , "ios_version": "6.0"
@@ -6284,6 +6286,7 @@
       "stuffed_flatbread"
     ]
   , "tags": [
+      "sandwich"
     ]
   , "unicode_version": "9.0"
   , "ios_version": "10.2"
@@ -17329,18 +17332,6 @@
     ]
   , "unicode_version": "6.0"
   , "ios_version": "8.3"
-  }
-, {
-    "emoji": "🇬🇸"
-  , "description": "South Georgia & South Sandwich Islands"
-  , "category": "Flags"
-  , "aliases": [
-      "south_georgia_south_sandwich_islands"
-    ]
-  , "tags": [
-    ]
-  , "unicode_version": "6.0"
-  , "ios_version": "9.0"
   }
 , {
     "emoji": "🇰🇷"
