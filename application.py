@@ -5,10 +5,9 @@ import requests
 from flask import Flask, jsonify, request
 app = Flask(__name__)
 import os
-subscription_key = None
-from apikeys import *
+subscription_key = os.environ.get('SUBKEY')
 if subscription_key is None:
-    subscription_key = os.environ.get('SUBKEY')
+    from apikeys import *
 assert subscription_key
 emotion_recognition_url = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect"
 
