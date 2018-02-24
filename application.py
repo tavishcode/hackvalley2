@@ -11,9 +11,28 @@ if subscription_key is None:
 assert subscription_key
 emotion_recognition_url = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect"
 
+#temp static
+# TODO use ML
+emojis = {
+    "anger": ['😠', '😤', '😡', '👿'],
+    "contempt": ['😇', '☺'],
+    "disgust": ['😒','😣','😖'],
+    "fear": ['😥','😰','😱'],
+    "happiness": ['😁','😀','😂','😄','😃','🙂'],
+    "neutral": ['😐','😶','😑','🙄'],
+    "sadness": ['😭','😢','😓','😟','🙁'],
+    "surprise": ['😮','😱','😨','😦','😫','😵'],
+}
 
 def getEmoji(analysis):
-    return ['😂', '😅']
+    maxE = None
+    maxS = 0
+    for face in analysis:
+        for emotion, score in face["faceAttributes"]["emotion"].iteritems():
+            if score > maxS:
+                maxE = emotion
+                maxS = score
+    return emojis.get(maxE, [])
 
 @application.route("/")
 def rootpath():
