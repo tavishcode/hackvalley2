@@ -3,30 +3,36 @@
 
 import requests
 from flask import Flask, jsonify, request
+
 application = Flask(__name__)
 import os
+
 subscription_key = os.environ.get('SUBKEY')
-if subscription_key is None:
+cv_sub_key = os.environ.get('CVSUBKEY')
+if subscription_key is None or cv_sub_key is None:
     from apikeys import *
+assert cv_sub_key
 assert subscription_key
 emotion_recognition_url = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect"
+vision_base_url = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze"
 
-#temp static
+# temp static
 # TODO use ML
-emojis = {
+face_emoji = {
     "anger": ['😠', '😤', '😡', '👿'],
     "contempt": ['😇', '☺'],
-    "disgust": ['😒','😣','😖'],
-    "fear": ['😥','😰','😱'],
-    "happiness": ['😁','😀','😂','😄','😃','🙂'],
-    "neutral": ['😐','😶','😑','🙄'],
-    "sadness": ['😭','😢','😓','😟','🙁'],
-    "surprise": ['😮','😱','😨','😦','😫','😵'],
+    "disgust": ['😒', '😣', '😖'],
+    "fear": ['😥', '😰', '😱'],
+    "happiness": ['😁', '😀', '😂', '😄', '😃', '🙂'],
+    "neutral": ['😐', '😶', '😑', '🙄'],
+    "sadness": ['😭', '😢', '😓', '😟', '🙁'],
+    "surprise": ['😮', '😱', '😨', '😦', '😫', '😵'],
     "sunglasses": ['😎'],
     "readingglasses": ['🤓'],
 }
 
-def getEmoji(analysis):
+
+def get_face_emoji(analysis):
     maxE = None
     maxS = 0
     for face in analysis:
@@ -36,23 +42,28 @@ def getEmoji(analysis):
                 if glasses in ["sunglasses", "readingglasses"]:
                     emotion = glasses
                 else:
-                    score = score/4
+                    score = score / 4
             if score > maxS:
                 maxE = emotion
                 maxS = score
-    return emojis.get(maxE, [])
+    return face_emoji.get(maxE, [])
 
-@application.route("/")
-def rootpath():
-    return 'hello world';
 
-@application.route("/emoji", methods=['POST'])
-def emoji():
-    # check if the post request has the file part
-    if 'image' not in request.files:
-        return jsonify({'error': 'no uploaded files'})
-    image = request.files['image']
-    image_data = image.read()
+object_emoji = {
+    'sandwich': ['🍔', '🥙', '🌯', '🌭'],
+    'apple': ['🍏', '🍎'],
+    # TODO fill or use database
+}
+
+
+def get_object_emoji(analysis):
+    emoji = []
+    for tag in analysis['tags']:
+        emoji += object_emoji.get(tag['name'].lower(), [])
+    return emoji
+
+
+def get_face_analysis(image_data):
     headers = {'Ocp-Apim-Subscription-Key': subscription_key, "Content-Type": "application/octet-stream"}
     params = {
         'returnFaceId': 'true',
@@ -61,12 +72,45 @@ def emoji():
     }
     response = requests.post(emotion_recognition_url, params=params, headers=headers, data=image_data)
     response.raise_for_status()
-    analysis = response.json()
-    emojiList = getEmoji(analysis)
-    return jsonify({
-        'emoji': emojiList,
-		'analysis': analysis
-    })
+    return response.json()
+
+
+def get_object_analysis(image_data):
+    headers = {'Ocp-Apim-Subscription-Key': cv_sub_key, "Content-Type": "application/octet-stream"}
+    params = {
+        'visualFeatures': 'Tags',
+    }
+    response = requests.post(vision_base_url, params=params, headers=headers, data=image_data)
+    response.raise_for_status()
+    return response.json()
+
+
+@application.route("/")
+def rootpath():
+    return jsonify({'error': 'Welcome to root'})
+
+
+@application.route("/emoji", methods=['POST'])
+def emoji():
+    # check if the post request has the file part
+    if 'image' not in request.files:
+        return jsonify({'error': 'no uploaded files'})
+    result = {}
+    image = request.files['image']
+    image_data = image.read()
+    face_analysis = get_face_analysis(image_data)
+    if face_analysis:
+        result['emoji'] = get_face_emoji(face_analysis)
+    else:
+        object_analysis = get_object_analysis(image_data)
+        result['emoji'] = get_object_emoji(object_analysis)
+    if application.debug:
+        if face_analysis:
+            result['face_analysis'] = face_analysis
+        elif object_analysis:
+            result['object_analysis'] = object_analysis
+    return jsonify(result)
+
 
 if __name__ == "__main__":
     application.debug = True
