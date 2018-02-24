@@ -22,6 +22,8 @@ emojis = {
     "neutral": ['😐','😶','😑','🙄'],
     "sadness": ['😭','😢','😓','😟','🙁'],
     "surprise": ['😮','😱','😨','😦','😫','😵'],
+    "sunglasses": ['😎'],
+    "readingglasses": ['🤓'],
 }
 
 def getEmoji(analysis):
@@ -29,6 +31,12 @@ def getEmoji(analysis):
     maxS = 0
     for face in analysis:
         for emotion, score in face["faceAttributes"]["emotion"].iteritems():
+            if emotion == "neutral":
+                glasses = face["faceAttributes"]["glasses"].lower()
+                if glasses in ["sunglasses", "readingglasses"]:
+                    emotion = glasses
+                else:
+                    score = score/4
             if score > maxS:
                 maxE = emotion
                 maxS = score
@@ -49,7 +57,7 @@ def emoji():
     params = {
         'returnFaceId': 'true',
         'returnFaceLandmarks': 'false',
-        'returnFaceAttributes': 'smile,emotion',
+        'returnFaceAttributes': 'smile,emotion,glasses',
     }
     response = requests.post(emotion_recognition_url, params=params, headers=headers, data=image_data)
     response.raise_for_status()
