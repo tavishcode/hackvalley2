@@ -7,6 +7,8 @@ from flask import Flask, jsonify, request
 application = Flask(__name__)
 import os
 
+from emojiconv import object_emoji
+
 subscription_key = os.environ.get('SUBKEY')
 cv_sub_key = os.environ.get('CVSUBKEY')
 if subscription_key is None or cv_sub_key is None:
@@ -49,11 +51,11 @@ def get_face_emoji(analysis):
     return face_emoji.get(maxE, [])
 
 
-object_emoji = {
-    'sandwich': ['🍔', '🥙', '🌯', '🌭'],
-    'apple': ['🍏', '🍎'],
-    # TODO fill or use database
-}
+# object_emoji = {
+#     'sandwich': ['🍔', '🥙', '🌯', '🌭'],
+#     'apple': ['🍏', '🍎'],
+#     # TODO fill or use database
+# }
 
 
 def get_object_emoji(analysis):
