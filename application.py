@@ -3,7 +3,7 @@
 
 import requests
 from flask import Flask, jsonify, request
-app = Flask(__name__)
+application = Flask(__name__)
 import os
 subscription_key = os.environ.get('SUBKEY')
 if subscription_key is None:
@@ -15,18 +15,17 @@ emotion_recognition_url = "https://westcentralus.api.cognitive.microsoft.com/fac
 def getEmoji(analysis):
     return ['😂', '😅']
 
-@app.route("/")
+@application.route("/")
 def rootpath():
     return 'hello world';
 
-@app.route("/emoji", methods=['POST'])
+@application.route("/emoji", methods=['POST'])
 def emoji():
     # check if the post request has the file part
     if 'image' not in request.files:
         return jsonify({'error': 'no uploaded files'})
     image = request.files['image']
-    # return str(image)
-    image_data = image.read()#open(image.tmppath, "rb").read()
+    image_data = image.read()
     headers = {'Ocp-Apim-Subscription-Key': subscription_key, "Content-Type": "application/octet-stream"}
     params = {
         'returnFaceId': 'true',
@@ -42,4 +41,5 @@ def emoji():
     })
 
 if __name__ == "__main__":
-    app.run()
+    application.debug = True
+    application.run()
