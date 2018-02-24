@@ -10,7 +10,16 @@ emotion_recognition_url = "https://westcentralus.api.cognitive.microsoft.com/fac
 
 
 def getEmoji(analysis):
-    return ['😂', '😅']
+    emoji = {"anger":'??', "contempt":'??', "disgust":'??', "fear":'??', "happiness":'??', "neutral":'??', "sadness":'??', "surprise":'??'}
+    re = []
+    data = analysis.read()
+    data = json.loads(data.decode("utf-8"))
+    emotion = data["scores"]
+    sorted_emotion = sorted(emotion, emotion=A.get, reverse=True)
+    for i in sorted_emotion:
+        re.append(emoji.get(i))
+    return re
+
 
 
 @app.route("/emoji", methods=['POST'])
