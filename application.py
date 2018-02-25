@@ -45,7 +45,8 @@ def get_face_emoji(analysis):
                     emotion = glasses
                     score = score / 2
                 else:
-                    score = score / 6
+                    # score = score / 6
+                    continue
             if score > maxS:
                 maxE = emotion
                 maxS = score
