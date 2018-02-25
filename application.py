@@ -41,7 +41,7 @@ def get_face_emoji(analysis):
         for emotion, score in face["faceAttributes"]["emotion"].iteritems():
             if emotion == "neutral":
                 glasses = face["faceAttributes"]["glasses"].lower()
-                if glasses in ["sunglasses", "readingglasses"]:
+                if glasses in ["sunglasses"]:
                     emotion = glasses
                     score = score / 2
                 else:
