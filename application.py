@@ -21,16 +21,16 @@ vision_base_url = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0
 # temp static
 # TODO use ML
 face_emoji = {
-    "anger": ['😠', '😤', '😡', '👿'],
-    "contempt": ['😇', '☺'],
-    "disgust": ['😒', '😣', '😖'],
-    "fear": ['😥', '😰', '😱'],
+    # "anger": ['😠', '😤', '😡', '👿'],
+    # "contempt": ['😇', '☺'],
+    # "disgust": ['😒', '😣', '😖'],
+    # "fear": ['😥', '😰', '😱'],
     "happiness": ['😁', '😀', '😂', '😄', '😃', '🙂'],
-    "neutral": ['😐', '😶', '😑', '🙄'],
+    # "neutral": ['😐', '😶', '😑', '🙄'],
     "sadness": ['😭', '😢', '😓', '😟', '🙁'],
-    "surprise": ['😮', '😱', '😨', '😦', '😫', '😵'],
-    "sunglasses": ['😎'],
-    "readingglasses": ['🤓'],
+    # "surprise": ['😮', '😱', '😨', '😦', '😫', '😵'],
+    # "sunglasses": ['😎'],
+    # "readingglasses": ['🤓'],
 }
 
 
@@ -39,15 +39,15 @@ def get_face_emoji(analysis):
     maxS = 0
     for face in analysis:
         for emotion, score in face["faceAttributes"]["emotion"].iteritems():
-            if emotion == "neutral":
-                glasses = face["faceAttributes"]["glasses"].lower()
-                if glasses in ["sunglasses"]:
-                    emotion = glasses
-                    score = score / 2
-                else:
-                    # score = score / 6
-                    continue
-            if score > maxS:
+            # if emotion == "neutral":
+            #     glasses = face["faceAttributes"]["glasses"].lower()
+            #     if glasses in ["sunglasses"]:
+            #         emotion = glasses
+            #         score = score / 2
+            #     else:
+            #         # score = score / 6
+            #         continue
+            if score > maxS and emotion in face_emoji:
                 maxE = emotion
                 maxS = score
     return face_emoji.get(maxE, [])
