@@ -22,9 +22,9 @@ vision_base_url = "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0
 # TODO use ML
 face_emoji = {
     "anger": ['😠', '😤', '😡', '👿'],
-    "contempt": ['😇', '☺'],
-    "disgust": ['😒', '😣', '😖'],
-    "fear": ['😥', '😰', '😱'],
+    # "contempt": ['😇', '☺'],
+    # "disgust": ['😒', '😣', '😖'],
+    # "fear": ['😥', '😰', '😱'],
     "happiness": ['😁', '😀', '😂', '😄', '😃', '🙂'],
     # "neutral": ['😐', '😶', '😑', '🙄'],
     "sadness": ['😭', '😢', '😓', '😟', '🙁'],
