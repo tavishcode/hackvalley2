@@ -4,7 +4,7 @@ emojifile = open('emoji.json', 'r')
 emojilist = json.loads(emojifile.read())
 emojidict = {}
 ignored_keys = ['fruit', 'food', 'red', 'blue', 'color']
-forbidden_keys = ['People', 'person']
+forbidden_keys = ['People', 'person', 'people']
 for emoji in emojilist:
     if 'emoji' not in emoji:
         continue
