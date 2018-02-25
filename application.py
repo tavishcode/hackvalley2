@@ -43,8 +43,9 @@ def get_face_emoji(analysis):
                 glasses = face["faceAttributes"]["glasses"].lower()
                 if glasses in ["sunglasses", "readingglasses"]:
                     emotion = glasses
+                    score = score / 2
                 else:
-                    score = score / 4
+                    score = score / 6
             if score > maxS:
                 maxE = emotion
                 maxS = score
@@ -113,6 +114,28 @@ def emoji():
         elif object_analysis:
             result['object_analysis'] = object_analysis
     return jsonify(result)
+
+
+# @application.route("/messenger_emoji", methods=['POST'])
+# def emoji():
+#     # check if the post request has the file part
+#     if 'image' not in request.files:
+#         return jsonify({'error': 'no uploaded files'})
+#     result = {}
+#     image = request.files['image']
+#     image_data = image.read()
+#     face_analysis = get_face_analysis(image_data)
+#     if face_analysis:
+#         result['emoji'] = get_face_emoji(face_analysis)
+#     else:
+#         object_analysis = get_object_analysis(image_data)
+#         result['emoji'] = get_object_emoji(object_analysis)
+#     if application.debug:
+#         if face_analysis:
+#             result['face_analysis'] = face_analysis
+#         elif object_analysis:
+#             result['object_analysis'] = object_analysis
+#     return jsonify(result)
 
 
 if __name__ == "__main__":
